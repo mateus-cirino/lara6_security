@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Group;
+use App\Company;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -40,6 +42,17 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function showRegistrationForm()
+    {
+        $groups = Group::all();
+
+        $companies = Company::all();
+
+        return view('auth.register',
+                    ['groups' => $groups,
+                     'companies' => $companies]);
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -52,6 +65,8 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'group' => ['required'],
+            'company' => ['required']
         ]);
     }
 
@@ -63,10 +78,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'password' => Hash::make($data['password'])
         ]);
+
+        $user->groups()->attach($data['group']);
+        
+        $user->companies()->attach($data['company']);
+
+        return $user;
     }
 }
