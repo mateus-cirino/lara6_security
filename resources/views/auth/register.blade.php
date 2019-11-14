@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -58,6 +59,46 @@
 
                             <div class="col-md-6">
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="group" class="col-md-4 col-form-label text-md-right">Group</label>
+
+                            <div class="col-md-6">
+                                <select multiple class="form-control @error('group') is-invalid @enderror" id="group" name="group">
+                                @forelse ($groups as $group)
+                                    <option value="{{ $group->id }}"> {{ $group->name }} </option>
+                                    @empty
+                                        <p>Não possui grupos.</p>
+
+                                @endforelse
+                                </select>
+                                @error('group')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="company" class="col-md-4 col-form-label text-md-right">Company</label>
+
+                            <div class="col-md-6">
+                                <select multiple class="form-control @error('company') is-invalid @enderror" id="company" name="company">
+                                @forelse ($companies as $company)
+                                    <option value="{{ $company->id }}"> {{ $company->name }} </option>
+                                    @empty
+                                        <p>Não possui empresas.</p>
+
+                                @endforelse
+                                </select>
+                                @error('company')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 
