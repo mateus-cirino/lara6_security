@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Company::class, 'user_company', 'user_id');
     }
+
+    public function owns (Post $related)
+    {
+        return $this->id == $related->user_id;
+    }
 }
