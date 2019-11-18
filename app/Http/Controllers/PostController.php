@@ -31,7 +31,10 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        if($this->authorize('create', 'App\Post'))
+        {
+            return view('post.create');
+        }
     }
 
     /**
@@ -53,9 +56,10 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        if(Gate::allows('show-post', $post))
-            return "liberado";
-        else return "nao liberado";
+        if($this->authorize('update', $post))
+        {
+            return view('post.show', ['post' => $post]);
+        }
     }
 
     /**
